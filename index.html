@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMarket - Buy & Sell Cars</title>
+    <style>
+        /* All CSS styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-bar {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar select, .search-bar input {
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            outline: none;
+            flex: 1;
+        }
+
+        .search-bar button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Featured Cars Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .car-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .car-details {
+            padding: 20px;
+        }
+
+        .car-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .car-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .car-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+
+        .car-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .car-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background-color: var(--light-gray);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 15px;
+        }
+
+        /* Testimonials Section */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--gray);
+        }
+
+        /* Sell Your Car Section */
+        .sell-car {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .sell-car-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .sell-car-text h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .sell-car-text p {
+            margin-bottom: 30px;
+        }
+
+        .sell-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        /* Contact Form Modal */
+        .contact-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            overflow: auto;
+        }
+
+        .contact-modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .car-modal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .car-modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .car-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .car-spec {
+            display: flex;
+            align-items: center;
+        }
+
+        .car-spec span {
+            margin-left: 10px;
+        }
+
+        /* Success message styles */
+        .success-message {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .success-message h3 {
+            color: #10b981;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            font-size: 16px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sell-car-content {
+                grid-template-columns: 1fr;
+            }
+
+            .car-modal-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .search-bar select, .search-bar input, .search-bar button {
+                width: 100%;
+            }
+        }
+
+        /* Adding smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Highlight the form when scrolled to */
+        .sell-form.highlight {
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+            transition: box-shadow 0.5s ease;
+        }
+
+        /* Portfolio Section Styles */
+        .portfolio-section {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            overflow: auto;
+        }
+
+        .portfolio-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: white;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-image {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .portfolio-text {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .portfolio-text h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .portfolio-text p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .show-portfolio {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+
+        .show-portfolio:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* File upload styling */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- Portfolio Section -->
+    <div class="portfolio-section" id="portfolioSection">
+        <div class="portfolio-content">
+            <img src="assets/logo.svg" alt="Auto Market Logo" class="portfolio-image">
+            <div class="portfolio-text">
+                <h2>Welcome to AUTO MARKET </h2>
+                <p>"Quality You Can Trust, Performance You'll Love."</p>
+                <p>The auto market's primary purpose is to facilitate the production, distribution, and sale of motor vehicles, impacting various aspects of society and the economy</p>
+                <p>FOUNDER BY:</p>
+                <p>
+                    <a href="https://www.linkedin.com/in/bhavik-naik-82a8bb265" target="_blank" style="color: white;">AYUSH GONDANE </a>
+                    |
+                    <a href="https://www.linkedin.com/in/sumaiyya-sayyad-23566a275/" target="_blank" style="color: white;">VICKY TAYDE </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <button class="show-portfolio" id="showPortfolio">About Us</button>
+
+    <!-- Contact Form Modal -->
+    <div class="contact-modal" id="contactModal">
+        <div class="contact-modal-content">
+            <span class="close-modal" id="closeContactModal">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                <input type="hidden" name="subject" value="New Contact Form Submission from AutoMarket">
+                <input type="hidden" name="from_name" value="AutoMarket Website">
+                <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                <input type="checkbox" name="botcheck" style="display: none;">
+                
+                <div class="form-group">
+                    <label for="contactName">Name</label>
+                    <input type="text" id="contactName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="contactSubmitBtn">Send Message</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Contact Seller Modal -->
+    <div class="contact-modal" id="contactSellerModal">
+        <div class="contact-modal-content">
+            <span class="close-modal" id="closeContactSellerModal">&times;</span>
+            <h2>Contact Seller</h2>
+            <form id="contactSellerForm">
+                <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                <input type="hidden" name="subject" value="New Seller Inquiry from AutoMarket">
+                <input type="hidden" name="from_name" value="AutoMarket Seller Inquiry">
+                <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                <input type="checkbox" name="botcheck" style="display: none;">
+                
+                <div class="form-group">
+                    <label for="sellerContactName">Name</label>
+                    <input type="text" id="sellerContactName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="sellerContactEmail">Email</label>
+                    <input type="email" id="sellerContactEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="sellerContactPhone">Phone</label>
+                    <input type="tel" id="sellerContactPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="sellerContactCity">City</label>
+                    <input type="text" id="sellerContactCity" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="sellerContactMessage">Message</label>
+                    <textarea id="sellerContactMessage" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="sellerSubmitBtn">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">AutoMarket</a>
+            <button class="mobile-menu-btn">☰</button>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#sell" class="sell-link">Sell Your Car</a></li>
+                <li><a href="#" id="contactUsBtn" style="color: var(--primary); font-weight: 600;">Contact Us</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Find Your Perfect Car</h1>
+            <p>Browse thousands of cars or sell your own. AutoMarket makes buying and selling cars simple and hassle-free.</p>
+            <div class="search-bar">
+                <select id="make">
+                    <option value="">All Makes</option>
+                    <option value="toyota">Toyota</option>
+                    <option value="honda">Honda</option>
+                    <option value="ford">Ford</option>
+                    <option value="bmw">BMW</option>
+                    <option value="mercedes">Mercedes</option>
+                </select>
+                <select id="model">
+                    <option value="">All Models</option>
+                </select>
+                <input type="number" placeholder="Max Price" id="price">
+                <button id="search-btn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Cars Section -->
+    <section class="section" id="cars">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Cars</h2>
+                <p>Browse our selection of premium vehicles available for purchase</p>
+            </div>
+            <div class="cars-grid" id="cars-container">
+                <!-- Cars will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Follow these simple steps to buy or sell your car</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">1</div>
+                    <h3>Browse Listings</h3>
+                    <p>Search through our extensive collection of vehicles to find your perfect match.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">2</div>
+                    <h3>Contact Seller</h3>
+                    <p>Directly connect with the seller to discuss details and arrange viewings.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <h3>Make a Deal</h3>
+                    <p>Negotiate the price and complete the transaction securely through our platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Customers Say</h2>
+                <p>Read testimonials from satisfied buyers and sellers</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"I sold my car within a week of listing it on AutoMarket. The process was incredibly smooth and I got a great price!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Smith" class="author-image">
+                        <div class="author-info">
+                            <h4>John Smith</h4>
+                            <p>Car Seller</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"Found my dream car at a price I could afford. The detailed listings and direct contact with the seller made the process transparent."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson" class="author-image">
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <p>Car Buyer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"As a dealer, AutoMarket has helped us reach more customers and sell our inventory faster. The platform is intuitive and powerful."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Michael Davis" class="author-image">
+                        <div class="author-info">
+                            <h4>Michael Davis</h4>
+                            <p>Car Dealer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell Your Car Section - UPDATED WITH WEB3FORMS -->
+    <section class="section sell-car" id="sell">
+        <div class="container">
+            <div class="sell-car-content">
+                <div class="sell-car-text">
+                    <h2>Sell Your Car With Us</h2>
+                    <p>List your vehicle on AutoMarket and reach thousands of potential buyers. Our platform makes selling your car quick, easy, and secure.</p>
+                    <p>Fill out the form with your car details, and our team will help you create an attractive listing that gets noticed.</p>
+                </div>
+                <div class="sell-form">
+                    <form id="sell-car-form">
+                        <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                        <input type="hidden" name="subject" value="New Car Listing Submission from AutoMarket">
+                        <input type="hidden" name="from_name" value="AutoMarket Car Listing">
+                        <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                        <input type="checkbox" name="botcheck" style="display: none;">
+                        
+                        <div class="form-group">
+                            <label for="car-make">Make</label>
+                            <input type="text" id="car-make" name="car_make" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-model">Model</label>
+                            <input type="text" id="car-model" name="car_model" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-year">Year</label>
+                            <input type="number" id="car-year" name="car_year" min="1900" max="2023" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-price">Price ($)</label>
+                            <input type="number" id="car-price" name="car_price" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-mileage">Mileage</label>
+                            <input type="number" id="car-mileage" name="car_mileage" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-description">Description</label>
+                            <textarea id="car-description" name="car_description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="car-image">Car Image</label>
+                            <div class="file-upload">
+                                <label for="car-image" class="file-upload-label">Choose file</label>
+                                <input type="file" id="car-image" name="car_image" accept="image/*">
+                                <div class="file-name" id="file-name">No file chosen</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-name">Your Name</label>
+                            <input type="text" id="contact-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email</label>
+                            <input type="email" id="contact-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Phone</label>
+                            <input type="tel" id="contact-phone" name="phone" required>
+                        </div>
+                        <button type="submit" class="submit-btn" id="sellCarSubmitBtn">Submit Listing</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AutoMarket</h3>
+                    <p>The best place to buy and sell cars online. Join thousands of satisfied customers today.</p>
+                    <div class="social-links">
+                        <a href="#" style="text-decoration: none;">📘</a>
+                        <a href="#" style="text-decoration: none;">📱</a>
+                        <a href="#" style="text-decoration: none;">📸</a>
+                        <a href="#" style="text-decoration: none;">📺</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#cars">Browse Cars</a></li>
+                        <li><a href="#sell">Sell Your Car</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" id="footerContactBtn">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li>123 Auto Street</li>
+                        <li>Car City, CC 12345</li>
+                        <li>info@automarket.com</li>
+                        <li>(123) 456-7890</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AutoMarket. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Car Details Modal -->
+    <div class="modal" id="car-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeCarModal">&times;</span>
+            <div class="car-modal-details" id="modal-content">
+                <!-- Modal content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Internal JavaScript -->
+    <script>
+        // Sample car data
+        const cars = [
+            {
+                id: 1,
+                make: 'Toyota',
+                model: 'Camry',
+                year: 2020,
+                price: 25000,
+                mileage: 15000,
+                fuel: 'Gasoline',
+                transmission: 'Automatic',
+                color: 'Silver',
+                description: 'Well-maintained Toyota Camry with low mileage. Features include power windows, cruise control, backup camera, and Bluetooth connectivity.',
+                image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+            },
+            {
+                id: 2,
+                make: 'Honda',
+                model: 'Civic',
+                year: 2019,
+                price: 22000,
+                mileage: 20000,
+                fuel: 'Gasoline',
+                transmission: 'Automatic',
+                color: 'Blue',
+                description: 'Sporty Honda Civic in excellent condition. Features include touchscreen display, Apple CarPlay, Android Auto, and Honda Sensing safety suite.',
+                image: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80'
+            },
+            {
+                id: 3,
+                make: 'Ford',
+                model: 'Mustang',
+                year: 2018,
+                price: 35000,
+                mileage: 25000,
+                fuel: 'Gasoline',
+                transmission: 'Manual',
+                color: 'Red',
+                description: 'Classic Ford Mustang with powerful engine and sleek design. Features include leather seats, premium sound system, and performance package.',
+                image: 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+            },
+            {
+                id: 4,
+                make: 'BMW',
+                model: '3 Series',
+                year: 2021,
+                price: 45000,
+                mileage: 10000,
+                fuel: 'Gasoline',
+                transmission: 'Automatic',
+                color: 'Black',
+                description: 'Luxury BMW 3 Series with premium features. Includes navigation, heated seats, sunroof, and advanced driver assistance systems.',
+                image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+            },
+            {
+                id: 5,
+                make: 'Tesla',
+                model: 'Model 3',
+                year: 2022,
+                price: 55000,
+                mileage: 5000,
+                fuel: 'Electric',
+                transmission: 'Automatic',
+                color: 'White',
+                description: 'Nearly new Tesla Model 3 with autopilot features. Includes premium interior, glass roof, and long-range battery.',
+                image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+            },
+            {
+                id: 6,
+                make: 'Mercedes',
+                model: 'E-Class',
+                year: 2020,
+                price: 58000,
+                mileage: 18000,
+                fuel: 'Gasoline',
+                transmission: 'Automatic',
+                color: 'Silver',
+                description: 'Elegant Mercedes E-Class with premium features. Includes leather interior, MBUX infotainment system, and driver assistance package.',
+                image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+            }
+        ];
+
+        // DOM Elements
+        const carsContainer = document.getElementById('cars-container');
+        const carModal = document.getElementById('car-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeCarModal = document.querySelector('#car-modal .close-modal');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const searchBtn = document.getElementById('search-btn');
+        const makeSelect = document.getElementById('make');
+        const modelSelect = document.getElementById('model');
+        const priceInput = document.getElementById('price');
+        const sellCarForm = document.getElementById('sell-car-form');
+        const contactModal = document.getElementById('contactModal');
+        const contactSellerModal = document.getElementById('contactSellerModal');
+        const contactUsBtn = document.getElementById('contactUsBtn');
+        const footerContactBtn = document.getElementById('footerContactBtn');
+        const closeContactModal = document.getElementById('closeContactModal');
+        const closeContactSellerModal = document.getElementById('closeContactSellerModal');
+        const contactForm = document.getElementById('contactForm');
+        const contactSellerForm = document.getElementById('contactSellerForm');
+        const contactSubmitBtn = document.getElementById('contactSubmitBtn');
+        const sellerSubmitBtn = document.getElementById('sellerSubmitBtn');
+        const sellCarSubmitBtn = document.getElementById('sellCarSubmitBtn');
+        const portfolioSection = document.getElementById('portfolioSection');
+        const showPortfolioBtn = document.getElementById('showPortfolio');
+        const carImageInput = document.getElementById('car-image');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        // Update file name display when file is selected
+        if (carImageInput) {
+            carImageInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileNameDisplay.textContent = this.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = 'No file chosen';
+                }
+            });
+        }
+
+        // Display cars
+        function displayCars(carsToDisplay = cars) {
+            carsContainer.innerHTML = '';
+            
+            if (carsToDisplay.length === 0) {
+                carsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No cars match your search criteria. Please try different filters.</p>';
+                return;
+            }
+            
+            carsToDisplay.forEach(car => {
+                const carCard = document.createElement('div');
+                carCard.className = 'car-card';
+                carCard.innerHTML = `
+                    <img src="${car.image}" alt="${car.make} ${car.model}" class="car-image">
+                    <div class="car-details">
+                        <h3 class="car-title">${car.year} ${car.make} ${car.model}</h3>
+                        <p class="car-price">$${car.price.toLocaleString()}</p>
+                        <div class="car-info">
+                            <span>${car.mileage.toLocaleString()} miles</span>
+                            <span>${car.transmission}</span>
+                            <span>${car.fuel}</span>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <a href="#" class="car-btn view-details-btn" data-id="${car.id}">View Details</a>
+                            <a href="#" class="car-btn contact-seller-btn" data-id="${car.id}">Contact Seller</a>
+                        </div>
+                    </div>
+                `;
+                carsContainer.appendChild(carCard);
+            });
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const carId = parseInt(btn.getAttribute('data-id'));
+                    openCarModal(carId);
+                });
+            });
+
+            document.querySelectorAll('.contact-seller-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    contactSellerModal.style.display = 'block';
+                });
+            });
+        }
+
+        // Open car modal
+        function openCarModal(carId) {
+            const car = cars.find(car => car.id === carId);
+            if (!car) return;
+
+            modalContent.innerHTML = `
+                <div>
+                    <img src="${car.image}" alt="${car.make} ${car.model}" class="car-modal-image">
+                </div>
+                <div>
+                    <h2>${car.year} ${car.make} ${car.model}</h2>
+                    <p class="car-price">$${car.price.toLocaleString()}</p>
+                    <p>${car.description}</p>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <strong>Year:</strong> <span>${car.year}</span>
+                        </div>
+                        <div class="car-spec">
+                            <strong>Mileage:</strong> <span>${car.mileage.toLocaleString()} miles</span>
+                        </div>
+                        <div class="car-spec">
+                            <strong>Fuel:</strong> <span>${car.fuel}</span>
+                        </div>
+                        <div class="car-spec">
+                            <strong>Transmission:</strong> <span>${car.transmission}</span>
+                        </div>
+                        <div class="car-spec">
+                            <strong>Color:</strong> <span>${car.color}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="submit-btn" onclick="contactSellerModal.style.display='block'; carModal.style.display='none';">Contact Seller</button>
+                    </div>
+                </div>
+            `;
+
+            carModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+
+        // Close modals
+        closeCarModal.addEventListener('click', () => {
+            carModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        });
+
+        closeContactModal.addEventListener('click', () => {
+            contactModal.style.display = 'none';
+        });
+
+        closeContactSellerModal.addEventListener('click', () => {
+            contactSellerModal.style.display = 'none';
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === carModal) {
+                carModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === contactModal) {
+                contactModal.style.display = 'none';
+            }
+            if (e.target === contactSellerModal) {
+                contactSellerModal.style.display = 'none';
+            }
+            if (e.target === portfolioSection) {
+                portfolioSection.style.display = 'none';
+            }
+        });
+
+        // Open contact modals
+        contactUsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            contactModal.style.display = 'block';
+        });
+
+        footerContactBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            contactModal.style.display = 'block';
+        });
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Search functionality
+        searchBtn.addEventListener('click', () => {
+            const selectedMake = makeSelect.value.toLowerCase();
+            const selectedModel = modelSelect.value.toLowerCase();
+            const maxPrice = priceInput.value ? parseInt(priceInput.value) : Infinity;
+
+            const filteredCars = cars.filter(car => {
+                const makeMatch = selectedMake === '' || car.make.toLowerCase() === selectedMake;
+                const modelMatch = selectedModel === '' || car.model.toLowerCase() === selectedModel;
+                const priceMatch = car.price <= maxPrice;
+
+                return makeMatch && modelMatch && priceMatch;
+            });
+
+            displayCars(filteredCars);
+        });
+
+        // Update models based on selected make
+        makeSelect.addEventListener('change', () => {
+            const selectedMake = makeSelect.value;
+            modelSelect.innerHTML = '<option value="">All Models</option>';
+
+            if (selectedMake) {
+                const models = [...new Set(cars
+                    .filter(car => car.make.toLowerCase() === selectedMake.toLowerCase())
+                    .map(car => car.model))];
+
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.toLowerCase();
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Web3Forms Sell Car Form Submission - NEW
+        sellCarForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            sellCarSubmitBtn.innerHTML = '<span class="spinner"></span> Submitting...';
+            sellCarSubmitBtn.disabled = true;
+            
+            // Prepare form data
+            const formData = new FormData(this);
+            
+            // Handle file upload
+            const fileInput = document.getElementById('car-image');
+            if (fileInput.files.length > 0) {
+                formData.append('car_image', fileInput.files[0]);
+            }
+            
+            // Send form data to Web3Forms
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    sellCarForm.innerHTML = `
+                        <div class="success-message">
+                            <h3>Thank you!</h3>
+                            <p>Your car listing has been submitted successfully. Our team will review it shortly.</p>
+                        </div>
+                    `;
+                    
+                    // Reset form after delay
+                    setTimeout(() => {
+                        window.location.href = '#'; // Redirect to home page or stay on same page
+                    }, 5000);
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    sellCarSubmitBtn.innerHTML = 'Submit Listing';
+                    sellCarSubmitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+                sellCarSubmitBtn.innerHTML = 'Submit Listing';
+                sellCarSubmitBtn.disabled = false;
+            });
+        });
+
+        // Web3Forms Contact Form Submission
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            contactSubmitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+            contactSubmitBtn.disabled = true;
+            
+            // Prepare form data
+            const formData = new FormData(this);
+            
+            // Send form data to Web3Forms
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    contactForm.innerHTML = `
+                        <div class="success-message">
+                            <h3>Thank you!</h3>
+                            <p>Your message has been sent successfully.</p>
+                        </div>
+                    `;
+                    
+                    // Close modal after delay
+                    setTimeout(() => {
+                        contactModal.style.display = 'none';
+                        // Reset form for next time
+                        contactForm.innerHTML = `
+                            <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                            <input type="hidden" name="subject" value="New Contact Form Submission from AutoMarket">
+                            <input type="hidden" name="from_name" value="AutoMarket Website">
+                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                            <input type="checkbox" name="botcheck" style="display: none;">
+                            
+                            <div class="form-group">
+                                <label for="contactName">Name</label>
+                                <input type="text" id="contactName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Message</label>
+                                <textarea id="contactMessage" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" id="contactSubmitBtn">Send Message</button>
+                        `;
+                    }, 3000);
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    contactSubmitBtn.innerHTML = 'Send Message';
+                    contactSubmitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+                contactSubmitBtn.innerHTML = 'Send Message';
+                contactSubmitBtn.disabled = false;
+            });
+        });
+
+        // Web3Forms Contact Seller Form Submission
+        contactSellerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            sellerSubmitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+            sellerSubmitBtn.disabled = true;
+            
+            // Prepare form data
+            const formData = new FormData(this);
+            
+            // Send form data to Web3Forms
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    contactSellerForm.innerHTML = `
+                        <div class="success-message">
+                            <h3>Thank you!</h3>
+                            <p>Your inquiry has been sent to the seller. They will contact you soon.</p>
+                        </div>
+                    `;
+                    
+                    // Close modal after delay
+                    setTimeout(() => {
+                        contactSellerModal.style.display = 'none';
+                        // Reset form for next time
+                        contactSellerForm.innerHTML = `
+                            <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                            <input type="hidden" name="subject" value="New Seller Inquiry from AutoMarket">
+                            <input type="hidden" name="from_name" value="AutoMarket Seller Inquiry">
+                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                            <input type="checkbox" name="botcheck" style="display: none;">
+                            
+                            <div class="form-group">
+                                <label for="sellerContactName">Name</label>
+                                <input type="text" id="sellerContactName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sellerContactEmail">Email</label>
+                                <input type="email" id="sellerContactEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sellerContactPhone">Phone</label>
+                                <input type="tel" id="sellerContactPhone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sellerContactCity">City</label>
+                                <input type="text" id="sellerContactCity" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sellerContactMessage">Message</label>
+                                <textarea id="sellerContactMessage" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" id="sellerSubmitBtn">Send Inquiry</button>
+                        `;
+                    }, 3000);
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    sellerSubmitBtn.innerHTML = 'Send Inquiry';
+                    sellerSubmitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+                sellerSubmitBtn.innerHTML = 'Send Inquiry';
+                sellerSubmitBtn.disabled = false;
+            });
+        });
+        
+        // Add smooth scrolling and form highlighting for the Sell Your Car link
+        document.querySelector('.sell-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Scroll to the sell section
+            document.getElementById('sell').scrollIntoView({ behavior: 'smooth' });
+            
+            // Highlight the form
+            const sellForm = document.querySelector('.sell-form');
+            sellForm.classList.add('highlight');
+            
+            // Focus on the first input field after scrolling
+            setTimeout(() => {
+                document.getElementById('car-make').focus();
+                
+                // Remove highlight after a few seconds
+                setTimeout(() => {
+                    sellForm.classList.remove('highlight');
+                }, 2000);
+            }, 1000);
+            
+            // Close mobile menu if open
+            navLinks.classList.remove('active');
+        });
+
+        // Portfolio Section Functionality
+        showPortfolioBtn.addEventListener('click', () => {
+            portfolioSection.style.display = 'block';
+        });
+
+        // Initialize the page
+        displayCars();
+    </script>
+</body>
+</html>
